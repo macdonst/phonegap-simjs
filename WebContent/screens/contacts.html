@@ -2,7 +2,7 @@
 <html>
   <head>
     <!-- meta name="viewport" content="width=device-width, height=device-height, user-scalable=yes, initial-scale=2.0, maximum-scale=4.0, minimum-scale=1.0" / -->
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+    <!-- meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" /-->
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"> <!-- ISO-8859-1 -->
     <title>PhoneGap</title>
     <script type="text/javascript" charset="utf-8" src="../phonegap.js"></script>      
@@ -27,7 +27,7 @@
         obj.filter = "Brooks";
         obj.multiple = true;
         obj.limit = 1000;
-        navigator.contacts.find(
+        navigator.service.contacts.find(
             ["displayName", "name", "phoneNumbers", "emails", "urls", "note"],
             function(contacts) {
                 var s = "";
@@ -62,54 +62,13 @@
 
     function addContact(){
         console.log("addContact for Android:");
-        /*
-        var contact = navigator.contacts.create();
-        contact.displayName = "Plumber";
-        var name = new ContactName();
-        name.givenName = "Jane";
-        name.familyName = "Doe";
-        contact.name = name;
 
+        var contact = navigator.service.contacts.create(getService('Contacts').getContactData());
+        	
         // save
         contact.save(
             function() { alert("Contact saved.");},
             function(e) { alert("Contact save failed: " + e); });
-        */
-        try{
-            var contact = navigator.contacts.create({"displayName": "Bryce User"});
-            //contact.id = 1;
-            var contactName = {
-                formatted: "Dooney User",
-                familyName: "User",
-                givenName: "Dooney",
-                middleName: "Doodle"
-            };
-
-            contact.name = contactName;
-            contact.gender = "male";
-            contact.note = "This is my note";
-
-            var phoneNumbers = [1];
-            phoneNumbers[0] = new ContactField('work', '512-555-1234', true);
-            contact.phoneNumbers = phoneNumbers;
-            
-            var org = [1];
-            org[0] = new ContactOrganization("IBM", "Emerging Tech", "Engineer");
-            contact.organizations = org;
-            
-            var addresses = [1];
-            addresses[0] = new ContactAddress(null, "1 IBM way", "Ottawa", "ON", "K2H 5K9", "Canada");
-            contact.addresses = addresses;
-
-            contact.save(
-                function() { alert("Contact saved.");},
-                function(e) { alert("Contact save failed: " + e.code); }
-            );
-            console.log("you have saved the contact");
-        }
-        catch (e){
-            alert(e);
-        }
 
     };
 
@@ -117,18 +76,24 @@
         console.log("updateContact for Android:");
 
         try{
-            var contact = navigator.contacts.create({"displayName": "Simon User"});
+            var contact = navigator.service.contacts.create({"displayName": "Simon User"});
             contact.id = 1;
             var contactName = {
                 formatted: "Some Guy",
                 familyName: "Some",
                 givenName: "Guy",
-                middleName: "The"
+                middleName: "The",
+                id: 1
             };
 
             contact.name = contactName;
             contact.gender = "female";
             contact.note = "This is another note";
+        
+        	var emails = [1];
+        	emails[0] = new ContactField('work', 'you@here.com', true);
+        	emails[0].id = 2;
+        	contact.emails = emails;
 
             var phoneNumbers = [1];
             phoneNumbers[0] = new ContactField('home', '888-555-1234', true);
@@ -160,7 +125,7 @@
     function removeContact(){
         console.log("removeContact for Android:");
         try{
-            var contact = navigator.contacts.create({"displayName": "Bryce User"});
+            var contact = navigator.service.contacts.create({"displayName": "Bryce User"});
             contact.id = 1;
 
             contact.remove(
